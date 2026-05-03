@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 224 32% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 224 28% 9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 224 30% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 152 76% 50%;
+    --primary-foreground: 224 32% 6%;
+    --primary-glow: 152 90% 60%;
+
+    --secondary: 224 20% 14%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 224 20% 14%;
+    --muted-foreground: 215 16% 60%;
+
+    --accent: 224 20% 16%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 62%;
+    --destructive-foreground: 210 40% 98%;
+    --destructive-glow: 0 90% 70%;
+
+    --border: 224 20% 16%;
+    --input: 224 20% 16%;
+    --ring: 152 76% 50%;
+
+    --radius: 0.875rem;
+
+    --gradient-bg: radial-gradient(ellipse at top, hsl(224 40% 12%) 0%, hsl(224 32% 6%) 60%);
+    --gradient-long: linear-gradient(135deg, hsl(152 76% 50%), hsl(165 80% 45%));
+    --gradient-short: linear-gradient(135deg, hsl(0 84% 62%), hsl(340 80% 55%));
+    --shadow-card: 0 1px 0 0 hsl(0 0% 100% / 0.04) inset, 0 8px 24px -12px hsl(0 0% 0% / 0.5);
+    --shadow-glow: 0 0 40px -10px hsl(152 76% 50% / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body, #root {
+    @apply h-full;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background: var(--gradient-bg);
+    background-attachment: fixed;
+    font-feature-settings: "cv11", "ss01";
+  }
+}
+
+@layer utilities {
+  .gradient-long { background: var(--gradient-long); }
+  .gradient-short { background: var(--gradient-short); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .text-long { color: hsl(var(--primary)); }
+  .text-short { color: hsl(var(--destructive)); }
+  .glass {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
