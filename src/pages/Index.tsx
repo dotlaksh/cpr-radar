@@ -44,51 +44,55 @@ export default function Index() {
   const navigate = useNavigate();
 
   return (
-    <main className="min-h-screen">
-      <div className="container px-4 sm:px-6 py-10 sm:py-16 lg:py-20 max-w-5xl">
-        <header className="text-center mb-10 sm:mb-14">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
-            CPR <span className="bg-gradient-to-t from-primary to-primary-glow bg-clip-text text-transparent">Radar</span>
+    <main className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center p-6">
+      <div className="container max-w-4xl relative z-10">
+        <header className="text-center mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border text-[10px] uppercase tracking-widest font-bold text-primary mb-6">
+            <Activity className="w-3 h-3 animate-pulse" /> Live Analysis Engine
+          </div>
+          <h1 className="text-5xl sm:text-7xl font-bold tracking-tighter mb-4 bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+            CPR RADAR
           </h1>
-          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto px-2 mb-12">
-            Advanced multi-timeframe confluence analysis for positional traders.
+          <p className="text-muted-foreground text-sm sm:text-lg max-w-md mx-auto leading-relaxed">
+            Institutional-grade multi-timeframe confluence radar for high-conviction positional trades.
           </p>
         </header>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          {universes.map((u) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl mx-auto">
+          {universes.map((u, i) => {
             const Icon = u.icon;
             return (
               <Card
                 key={u.id}
                 onClick={() => navigate(`/scan/${u.id}`)}
-                className="group relative p-5 sm:p-6 cursor-pointer glass shadow-card hover:border-primary/50 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+                className="group relative p-6 cursor-pointer glass-card hover:bg-white/[0.06] hover:border-primary/40 hover:-translate-y-1 active:scale-95 transition-all duration-300"
+                style={{ animationDelay: `${i * 100}ms` }}
               >
-                <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-primary/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative flex items-start justify-between mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-primary" />
+                <div className="flex items-center justify-between mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+                    <Icon className="w-6 h-6" />
                   </div>
-                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  <div className="text-[10px] font-black tracking-widest text-muted-foreground group-hover:text-primary transition-colors">
+                    {u.count} SYMBOLS
+                  </div>
                 </div>
-                <h2 className="text-lg font-semibold mb-1">{u.name}</h2>
-                <p className="text-sm text-muted-foreground mb-3">{u.desc}</p>
-                <div className="flex items-center justify-between mt-auto">
-                  <div className="text-xs font-medium text-muted-foreground">
-                    {u.count} symbols
-                  </div>
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    Scan Now
-                  </div>
+                
+                <div>
+                  <h2 className="text-xl font-bold mb-1 group-hover:translate-x-1 transition-transform">{u.name}</h2>
+                  <p className="text-xs text-muted-foreground line-clamp-1">{u.desc}</p>
+                </div>
+
+                <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-300">
+                  <ArrowRight className="w-5 h-5 text-primary" />
                 </div>
               </Card>
             );
           })}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-10 sm:mt-14">
-          Tap a universe to begin a one-shot deterministic scan
-        </p>
+        <footer className="mt-16 text-center text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40 font-bold">
+          Market Intelligence v2.0
+        </footer>
       </div>
     </main>
   );
