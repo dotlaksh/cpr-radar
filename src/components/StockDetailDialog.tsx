@@ -1,5 +1,5 @@
-import { Dialog, DialogContent, DialogDescription } from "@/components/ui/dialog";
-import { TrendingUp, TrendingDown, Target, Layers, Activity, ShieldCheck } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { TrendingUp, TrendingDown, Target, Layers, Activity, ShieldCheck, Check, X } from "lucide-react";
 import { ScanResult } from "@/types/scanner";
 import { Badge } from "./ui/badge";
 
@@ -28,7 +28,7 @@ export function StockDetailDialog({
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
              <div>
-                <h2 className="text-4xl font-black tracking-tighter mb-1">{result.symbol}</h2>
+                <DialogTitle className="text-4xl font-black tracking-tighter mb-1">{result.symbol}</DialogTitle>
                 <div className="flex gap-2">
                    <Badge className="bg-primary text-white border-none rounded-lg px-2 text-[10px] uppercase font-black">
                       {result.structure}
@@ -90,6 +90,34 @@ export function StockDetailDialog({
                   </Badge>
                 </div>
               ))}
+          </section>
+
+          <section className="mb-8">
+            <h3 className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-black mb-4 flex items-center gap-2 px-1">
+               <Check className="w-3 h-3" /> Setup Validation
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: "Proximity < 5%", pass: result.proximityPass },
+                { label: "Cluster < 1%", pass: result.isCluster },
+                { label: "A+ Quality", pass: result.setupType === 'A+' },
+                { label: "Directional Bias", pass: result.direction !== 'NEUTRAL' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 p-3 glass-card rounded-xl">
+                  {item.pass ? (
+                    <div className="w-5 h-5 rounded-md bg-emerald-500/20 flex items-center justify-center">
+                       <Check className="w-3 h-3 text-emerald-400" />
+                    </div>
+                  ) : (
+                    <div className="w-5 h-5 rounded-md bg-white/5 flex items-center justify-center">
+                       <X className="w-3 h-3 text-muted-foreground" />
+                    </div>
+                  )}
+                  <span className={`text-[10px] font-bold ${item.pass ? 'text-foreground' : 'text-muted-foreground'}`}>
+                    {item.label}
+                  </span>
+                </div>
+              ))}
             </div>
           </section>
 
@@ -110,7 +138,7 @@ export function StockDetailDialog({
             </div>
           </section>
         </div>
-      </div>
+      </DialogContent>
     </Dialog>
   );
 }
