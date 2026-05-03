@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowUpRight, ArrowDownRight, SearchX, TrendingUp, TrendingDown, Zap, Target, Eye, ShieldCheck, Waves } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ArrowDownRight, SearchX, TrendingUp, TrendingDown, Zap, Target, Eye, ShieldCheck, Waves, Activity } from "lucide-react";
 import nifty100 from "@/data/nifty100.json";
 import midcap150 from "@/data/niftyMidcap150.json";
 import smallcap250 from "@/data/niftySmallcap250.json";
@@ -12,6 +12,7 @@ import microcap250 from "@/data/niftyMicrocap250.json";
 import { StockSymbol, UniverseConfig, ScanResult } from "@/types/scanner";
 import { fetchMarketData, evaluate } from "@/lib/scanner";
 import { StockDetailDialog } from "@/components/StockDetailDialog";
+import { useScanner } from "@/hooks/useScanner";
 
 const UNIVERSES: Record<string, UniverseConfig> = {
   nifty100: { name: "NIFTY 100", symbols: (nifty100 as unknown) as StockSymbol[] },

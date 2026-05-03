@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { TrendingUp, TrendingDown, Target, Layers, Activity, ShieldCheck, Check, X } from "lucide-react";
+import { Check, X, Target, Layers, Activity, ShieldCheck, ChevronRight } from "lucide-react";
 import { ScanResult } from "@/types/scanner";
 import { Badge } from "./ui/badge";
 
@@ -13,132 +13,150 @@ export function StockDetailDialog({
   onOpenChange: (o: boolean) => void;
 }) {
   if (!result) return null;
-  const isLong = result.direction === "LONG";
-  
+
   const fmt = (v: number) => v.toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg p-0 gap-0 border-none bg-background/80 backdrop-blur-2xl sm:rounded-[2.5rem] overflow-hidden focus:outline-none">
+      <DialogContent className="max-w-3xl p-0 gap-0 border-none bg-background text-foreground sm:rounded-[2.5rem] overflow-hidden focus:outline-none shadow-2xl">
         <DialogDescription className="sr-only">
           Detailed technical analysis for {result.symbol}.
         </DialogDescription>
 
-        <div className="relative p-6 sm:p-8 pb-6 max-h-[90vh] overflow-y-auto scrollbar-none">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-             <div>
-                <DialogTitle className="text-4xl font-black tracking-tighter mb-1">{result.symbol}</DialogTitle>
-                <div className="flex gap-2">
-                   <Badge className="bg-primary text-white border-none rounded-lg px-2 text-[10px] uppercase font-black">
-                      {result.structure}
-                   </Badge>
-                   {result.setupType === "A+" && (
-                      <Badge className="bg-amber-500 text-black border-none rounded-lg px-2 text-[10px] uppercase font-black">
-                         A+ SETUP
-                      </Badge>
-                   )}
+        <div className="p-8 pb-10 overflow-y-auto max-h-[95vh] scrollbar-none">
+          {/* Hero Header */}
+          <header className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[10px] uppercase tracking-[0.3em] font-black text-muted-foreground">Technical Analysis</h2>
+            </div>
+            <div className="flex items-baseline gap-4 mb-2">
+               <DialogTitle className="text-5xl font-black tracking-tighter">{result.symbol}</DialogTitle>
+               <span className="text-muted-foreground font-semibold text-base">{result.trend}</span>
+            </div>
+            <div className="text-6xl font-black tabular-nums tracking-tighter">
+               ₹{fmt(result.price)}
+            </div>
+          </header>
+
+          {/* Classification Bar */}
+          <div className="grid grid-cols-2 gap-4 mb-10">
+             <div className="bg-muted/50 border border-white/5 rounded-3xl p-6 flex items-center justify-between">
+                <div>
+                   <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-2">Structure Classification</p>
+                   <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                         <Target className="w-5 h-5" />
+                      </div>
+                      <span className="text-xl font-bold tracking-tight">{result.structure}</span>
+                   </div>
                 </div>
              </div>
-             <div className="text-right">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-black mb-1">CMP</p>
-                <p className="text-3xl font-black tabular-nums tracking-tight">₹{fmt(result.price)}</p>
-             </div>
-          </div>
-
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 gap-3 mb-8">
-             <div className="glass-card rounded-[1.5rem] p-5 text-center">
-                <p className="text-[9px] uppercase tracking-widest text-muted-foreground font-bold mb-2">Direction</p>
-                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                  isLong ? 'bg-emerald-500/10 text-emerald-400' : 'bg-destructive/10 text-destructive'
+             <div className="bg-muted/50 border border-white/5 rounded-3xl p-6 flex flex-col justify-center items-end">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-2">Price Position</p>
+                <Badge className={`rounded-full px-5 py-2 text-xs font-bold uppercase border-none ${
+                   result.pricePosition === 'Above' ? 'bg-emerald-500/10 text-emerald-400' : 
+                   result.pricePosition === 'Below' ? 'bg-rose-500/10 text-rose-400' : 'bg-primary/10 text-primary'
                 }`}>
-                   {isLong ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                   {result.direction}
-                </div>
-             </div>
-             <div className="glass-card rounded-[1.5rem] p-5 text-center">
-                <p className="text-[9px] uppercase tracking-widest text-muted-foreground font-bold mb-2">Orientation</p>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/5">
-                   <Activity className="w-3 h-3 text-primary" />
-                   {result.pricePosition}
-                </div>
+                   {result.pricePosition} Cluster Zone
+                </Badge>
              </div>
           </div>
 
-          {/* Relationship Matrix Section */}
-          <section className="mb-8">
-            <h3 className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-black mb-4 flex items-center gap-2 px-1">
-               <Layers className="w-3 h-3" /> Relationship Matrix
-            </h3>
-            <div className="space-y-2">
-              {result.relationships.map((r, i) => (
-                <div key={i} className="flex items-center justify-between p-4 glass-card rounded-2xl group transition-all active:bg-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                       <Target className="w-4.5 h-4.5 text-primary/60" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold tracking-tight">{r.pair}</p>
-                      <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">{r.tightness}</p>
-                    </div>
-                  </div>
-                  <Badge variant="outline" className={`border-none rounded-lg text-[9px] font-black uppercase tracking-widest py-1 px-3 ${
-                    r.relation === 'Overlap' ? 'bg-indigo-500/10 text-indigo-400' : 'bg-white/5 text-muted-foreground'
-                  }`}>
-                    {r.relation}
-                  </Badge>
+          {/* Core Confluence Analysis */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+             {/* Left: Relationship Matrix */}
+             <section>
+                <div className="flex items-center gap-2 mb-4 px-1">
+                   <Layers className="w-3.5 h-3.5 text-primary" />
+                   <h3 className="text-[10px] uppercase tracking-[0.2em] font-black text-muted-foreground">Relationship Matrix</h3>
                 </div>
-              ))}
-          </section>
-
-          <section className="mb-8">
-            <h3 className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-black mb-4 flex items-center gap-2 px-1">
-               <Check className="w-3 h-3" /> Setup Validation
-            </h3>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { label: "Proximity < 5%", pass: result.proximityPass },
-                { label: "Cluster < 1%", pass: result.isCluster },
-                { label: "A+ Quality", pass: result.setupType === 'A+' },
-                { label: "Directional Bias", pass: result.direction !== 'NEUTRAL' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 p-3 glass-card rounded-xl">
-                  {item.pass ? (
-                    <div className="w-5 h-5 rounded-md bg-emerald-500/20 flex items-center justify-center">
-                       <Check className="w-3 h-3 text-emerald-400" />
-                    </div>
-                  ) : (
-                    <div className="w-5 h-5 rounded-md bg-white/5 flex items-center justify-center">
-                       <X className="w-3 h-3 text-muted-foreground" />
-                    </div>
-                  )}
-                  <span className={`text-[10px] font-bold ${item.pass ? 'text-foreground' : 'text-muted-foreground'}`}>
-                    {item.label}
-                  </span>
+                <div className="space-y-2">
+                   {result.relationships.map((r, i) => (
+                      <div key={i} className="flex items-center justify-between p-4 bg-muted/30 border border-white/5 rounded-2xl">
+                         <span className="text-xs font-bold text-foreground/80">{r.pair}</span>
+                         <div className="flex items-center gap-3">
+                            <span className="text-[11px] font-black uppercase tracking-wider">{r.relation}</span>
+                            <Badge variant="outline" className="text-[9px] font-black uppercase bg-background border-none h-5 px-2">
+                               {r.tightness}
+                            </Badge>
+                         </div>
+                      </div>
+                   ))}
                 </div>
-              ))}
-            </div>
-          </section>
+             </section>
 
-          {/* Cluster Precision Footer */}
+             {/* Right: Confluence Checklist */}
+             <section>
+                <div className="flex items-center gap-2 mb-4 px-1">
+                   <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                   <h3 className="text-[10px] uppercase tracking-[0.2em] font-black text-muted-foreground">Confluence Checklist</h3>
+                </div>
+                <div className="space-y-2">
+                   {result.checks.map((c, i) => (
+                      <div key={i} className="flex items-center justify-between p-4 bg-muted/30 border border-white/5 rounded-2xl">
+                         <span className="text-xs font-bold text-foreground/80">{c.label}</span>
+                         {c.passed ? (
+                            <div className="w-5 h-5 rounded-md bg-emerald-500/10 flex items-center justify-center">
+                               <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            </div>
+                         ) : (
+                            <div className="w-5 h-5 rounded-md bg-white/5 flex items-center justify-center">
+                               <X className="w-3.5 h-3.5 text-muted-foreground" />
+                            </div>
+                         )}
+                      </div>
+                   ))}
+                </div>
+             </section>
+          </div>
+
+          {/* Pivot Details */}
           <section>
-            <h3 className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-black mb-4 flex items-center gap-2 px-1">
-               <ShieldCheck className="w-3 h-3" /> Precision Metrics
-            </h3>
-            <div className="p-6 glass-card rounded-[2rem] flex items-center justify-between border-primary/20 bg-primary/5">
-               <div>
-                  <p className="text-sm font-black mb-1">Cluster Width</p>
-                  <p className="text-[10px] text-muted-foreground font-bold tracking-tight">Multi-TF Structural Coiling</p>
-               </div>
-               <div className="text-right">
-                  <p className="text-3xl font-black text-primary tracking-tighter tabular-nums">{result.clusterWidthPct.toFixed(2)}%</p>
-                  <p className="text-[9px] font-black uppercase text-primary/60 tracking-widest">Cohesion Index</p>
-               </div>
-            </div>
+             <div className="flex items-center gap-2 mb-4 px-1">
+                <Activity className="w-3.5 h-3.5 text-primary" />
+                <h3 className="text-[10px] uppercase tracking-[0.2em] font-black text-muted-foreground">Multi-Timeframe Pivot Detail</h3>
+             </div>
+             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                   { label: 'MONTHLY', data: result.monthly },
+                   { label: 'QUARTERLY', data: result.quarterly },
+                   { label: 'YEARLY', data: result.yearly }
+                ].map((item) => (
+                   <div key={item.label} className="bg-muted/30 border border-white/5 rounded-[2rem] p-6">
+                      <div className="flex items-center justify-between mb-6">
+                         <span className="text-[10px] font-black tracking-widest text-muted-foreground">{item.label}</span>
+                         <Badge className="bg-primary/10 text-primary border-none text-[9px] font-black uppercase px-2 py-0.5 rounded-lg">
+                            {item.data.label}
+                         </Badge>
+                      </div>
+                      <div className="space-y-4">
+                         <div className="flex justify-between items-center text-xs">
+                            <span className="text-muted-foreground font-bold">TC</span>
+                            <span className="font-bold text-foreground/80">₹{fmt(item.data.tc)}</span>
+                         </div>
+                         <div className="flex justify-between items-end">
+                            <span className="text-[10px] font-black tracking-[0.2em] text-muted-foreground">PIVOT</span>
+                            <span className="text-2xl font-black tabular-nums tracking-tighter">₹{fmt(item.data.pivot)}</span>
+                         </div>
+                         <div className="flex justify-between items-center text-xs pt-2 border-t border-white/5">
+                            <span className="text-muted-foreground font-bold">BC</span>
+                            <span className="font-bold text-foreground/80">₹{fmt(item.data.bc)}</span>
+                         </div>
+                      </div>
+                   </div>
+                ))}
+             </div>
           </section>
         </div>
+
+        <button 
+           onClick={() => onOpenChange(false)}
+           className="absolute top-6 right-6 w-10 h-10 rounded-full bg-muted/50 border border-white/5 flex items-center justify-center hover:bg-muted transition-colors focus:outline-none group"
+        >
+           <X className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+        </button>
       </DialogContent>
     </Dialog>
+  );
   );
 }
