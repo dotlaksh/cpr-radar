@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Check, X, ArrowUpRight, ArrowDownRight, Target, Zap, Layers, Activity, ShieldCheck } from "lucide-react";
 import { ScanResult, CPRLevels } from "@/types/scanner";
 import { Badge } from "./ui/badge";
@@ -36,6 +36,9 @@ export function StockDetailDialog({
                   <DialogTitle className="text-xl sm:text-2xl font-bold truncate">
                     {result.symbol}
                   </DialogTitle>
+                  <DialogDescription className="sr-only">
+                    Deep structural analysis and multi-timeframe confluence for {result.symbol}.
+                  </DialogDescription>
                   {result.setupType === "A+" && (
                     <Badge className="bg-amber-500 text-white border-none gap-1">
                       <Zap className="w-3 h-3 fill-current" /> A+ Setup
