@@ -1,216 +1,81 @@
-Here’s a clean, professional **README.md** tailored to your app and workflow:
+# 📡 CPR Confluence Radar
+
+A high-conviction structural analysis engine designed for identifying institutional-grade confluence zones using multi-timeframe **Central Pivot Range (CPR)**.
+
+This is a specialized rule-based filtering tool that ignores market noise and lagging indicators to find stocks coiling within significant structural clusters.
 
 ---
 
-# 📊 CPR Positional Scanner
+## ⚡ The Confluence Core
 
-A minimal web-based scanner for identifying high-probability positional trades using **Central Pivot Range (CPR)** and higher timeframe trend alignment.
+This scanner identifies **A+ Setups** where price is interacting with a convergence of Monthly, Quarterly, and Yearly pivot levels.
 
-This tool focuses strictly on **Monthly, Quarterly, and Yearly CPR**, filtering only the strongest setups based on predefined rules.
-
----
-
-## 🚀 Core Idea
-
-This is not a trading dashboard.
-This is a **rule-based filtering engine**.
-
-The app scans a predefined universe of stocks and shows **only those that meet ALL trading conditions**.
-
-If no stocks are shown → **no trade**.
+### 🔍 Key Scanning Rules:
+*   **Structural Cluster**: Identifies zones where multi-timeframe pivots converge within a **1% range**.
+*   **Strict Proximity**: Filters results to show only stocks where the Current Market Price (CMP) is within **5%** of all three major pivots.
+*   **Pure Structure**: Zero reliance on Moving Averages (EMAs). Analysis is driven entirely by price action and mathematical pivot confluence.
+*   **Precision Calculation**: Monthly CPR is dynamically calculated from the previous month's HLC (e.g., May CPR uses April data).
 
 ---
 
-## 🧭 Workflow
+## 🛠️ Advanced Analytics Dashboard
 
-1. Select a stock universe:
+Every result is processed through a deep structural analysis pipeline:
 
-   * NIFTY 100
-   * NIFTY MIDCAP 150
-   * NIFTY SMALLCAP 250
+### 1. Structure Classification
+*   **Perfect Confluence**: Pivots converged within < 0.25%.
+*   **Tight Cluster**: High-density zone within < 1.0%.
+*   **Bullish/Bearish Stack**: Clear directional structural bias.
 
-2. The app:
+### 2. Relationship Matrix
+Analyzes the physical interaction between timeframe pairs (Monthly/Quarterly, Quarterly/Yearly):
+*   **Relation**: Above, Below, or Overlapping.
+*   **Tightness**: Very Tight, Tight, Loose, or Far.
 
-   * Loads symbols from JSON
-   * Fetches real market data
-   * Computes CPR and EMA
-   * Applies strict validation rules
-
-3. Output:
-
-   * Only valid LONG or SHORT setups
-
----
-
-## ⚙️ Strategy Logic
-
-### 📌 Timeframes Used
-
-* Monthly CPR
-* Quarterly CPR
-* Yearly CPR
-* EMA (20 / 50 / 200)
-
-No intraday or lower timeframe logic is used.
+### 3. Price Positioning
+Real-time tracking of price relative to the cluster:
+*   **Inside**: Price is literally within the "sandwich" of pivots.
+*   **Above/Below**: Potential breakout or breakdown from the structural floor/ceiling.
 
 ---
 
-## 📐 CPR Calculation (CRITICAL)
+## 🚀 How to Use
 
-CPR is calculated using **previous completed period data only**.
-
-| Timeframe | Data Used            |
-| --------- | -------------------- |
-| Monthly   | Previous month HLC   |
-| Quarterly | Previous quarter HLC |
-| Yearly    | Previous year HLC    |
-
-### ⚠️ Important Rules
-
-* Do NOT use current/incomplete candles
-* CPR values remain constant during the active period
-* Incorrect CPR calculation invalidates the strategy
+1.  **Select a Universe**: Choose from Nifty 100, Midcap 150, Smallcap 250, or Microcap 250.
+2.  **Live Scan**: The engine fetches fresh market data and evaluates structural integrity across all three timeframes.
+3.  **Filter by Quality**: Use the **A+** or **HQ Cluster** filters to find the highest-probability zones.
+4.  **Execute**: No setups found = No trade. Wait for structural alignment.
 
 ---
 
-## 📈 Trade Conditions
+## 💻 Tech Stack
 
-### ✅ LONG Setup (All must be true)
-
-* Price > Yearly TC
-* Price > Quarterly TC
-* EMA 20 > EMA 50 > EMA 200
-* Monthly CPR width < 0.5%
+*   **Frontend**: React + Vite + Tailwind CSS
+*   **UI Components**: Radix UI + Lucide Icons (Glassmorphic Design)
+*   **Data Pipeline**: Supabase Edge Functions + Market Data API
+*   **Performance**: Session-level caching for rapid multi-universe analysis.
 
 ---
 
-### 🔻 SHORT Setup (All must be true)
+## 📦 Getting Started
 
-* Price < Yearly BC
-* Price < Quarterly BC
-* EMA 20 < EMA 50 < EMA 200
-* Monthly CPR width < 0.5%
+1.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
----
+2.  **Configure Environment**:
+    Create a `.env` file with your Supabase credentials:
+    ```env
+    VITE_SUPABASE_URL=your_url
+    VITE_SUPABASE_PUBLISHABLE_KEY=your_key
+    ```
 
-## 📊 Output Behavior
-
-* Only stocks meeting ALL conditions are shown
-* No partial matches
-* No ranking (yet)
-
----
-
-## 📁 Data Sources
-
-### Stock Universes
-
-Provided via JSON files:
-
-* `nifty100.json`
-* `niftyMidcap150.json`
-* `niftySmallcap250.json`
-
-Each file contains a list of symbols.
+3.  **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
 
 ---
 
-### Market Data
-
-Fetched from Yahoo Finance via backend API:
-
-```
-/api/market-data?symbol=XYZ
-```
-
-Includes:
-
-* Daily OHLC data
-* Latest price
-
----
-
-## 🧮 Calculations
-
-From daily data:
-
-* Monthly candles → grouped by month
-* Quarterly candles → grouped by 3 months
-* Yearly candles → grouped by year
-
-Then computed:
-
-* CPR (Pivot, TC, BC)
-* CPR Width (%)
-* EMA 20 / 50 / 200
-
----
-
-## 🖥️ UI Overview
-
-### 1. Landing Page
-
-* Select stock universe
-
-### 2. Scanner Page
-
-* Runs scan once
-* Displays only valid setups
-* Shows progress while scanning
-
----
-
-## ⏳ Expected Behavior
-
-* Low-frequency signals (positional trading)
-* Some days → no trades
-* Strict filtering → fewer but higher quality setups
-
----
-
-## 🛑 Constraints
-
-* No charts
-* No alerts
-* No trade journal
-* No automation
-* No authentication
-
----
-
-## ⚠️ Known Limitations
-
-* Dependent on Yahoo Finance data reliability
-* API rate limits may slow large scans
-* No caching (yet)
-
----
-
-## 🔮 Future Improvements
-
-* Parallel scanning (performance boost)
-* Result ranking (setup quality score)
-* Trade detail view
-* Backtesting engine
-* Caching layer
-
----
-
-## 🎯 Philosophy
-
-This system is built on one principle:
-
-> **“No trade is a valid outcome.”**
-
-The goal is not activity —
-the goal is **precision and discipline**.
-
----
-
-If you want, I can next:
-
-* Convert this into a deployable project structure
-* Add performance optimizations
-* Or expand this into a full trading platform
-
-Just tell me the direction.
+*Built for traders who prioritize structure over noise.*
